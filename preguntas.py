@@ -11,6 +11,7 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import csv
 
 
 def pregunta_01():
@@ -21,7 +22,14 @@ def pregunta_01():
     214
 
     """
-    return
+    suma_columna =  0
+    
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        for row in data:
+            suma_columna += int(row[1])
+    print(suma_columna)
+    return suma_columna
 
 
 def pregunta_02():
@@ -39,7 +47,20 @@ def pregunta_02():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        cantidad_letras = {}
+    
+        for fila in data:
+            letra = fila [0][0]
+            if letra in cantidad_letras:
+                cantidad_letras[letra] += 1
+            else:
+                cantidad_letras[letra] = 1
+    
+    resultado = sorted(cantidad_letras.items())
+    print(resultado)
+    return resultado
 
 
 def pregunta_03():
@@ -57,7 +78,20 @@ def pregunta_03():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        suma_letras = {}
+        for fila in data:
+            letra = fila[0][0]
+            valor = float(fila[1])
+            if letra in suma_letras:
+                suma_letras[letra] += valor
+            else:
+                suma_letras[letra] = valor
+        
+    resultado = sorted(suma_letras.items())
+    print(resultado)
+    return resultado
 
 
 def pregunta_04():
@@ -82,7 +116,23 @@ def pregunta_04():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        fechas = []
+        for fila in data:
+            fecha = fila[2]
+            fechas.append(fecha)
+            
+    registros_mes = {}
+    for fecha in fechas:
+        mes = fecha.split('-')[1]
+        if mes in registros_mes:
+            registros_mes [mes] += 1
+        else:
+            registros_mes [mes] = 1
+    lista_registros_mes = sorted(registros_mes.items())
+    print(lista_registros_mes)
+    return lista_registros_mes
 
 
 def pregunta_05():
@@ -100,7 +150,24 @@ def pregunta_05():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        resultados = {}
+        
+        for fila in data:
+            letra = fila[0]
+            valor = int(fila[1])
+            
+            if letra not in resultados:
+                resultados[letra] = [valor, valor]
+            else:
+                resultados[letra][0] = max(resultados[letra][0], valor)
+                resultados[letra][1] = min(resultados[letra][1], valor)
+                    
+        lista_resultados = [(letra, resultados[letra][0], resultados[letra][1]) for letra in sorted(resultados)]
+        print(lista_resultados)
+    
+    return lista_resultados
 
 
 def pregunta_06():
@@ -125,7 +192,32 @@ def pregunta_06():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        resultado = {}
+        
+        for fila in data:
+            pares = fila[4].split(',')
+            
+            for par in pares:
+                key, value = par.split(':')
+                key = key.strip()
+                
+                if key in resultado:
+                    resultado[key].append(float(value))
+                else:
+                    resultado[key] = [float(value)]
+
+    resultado_final = []
+    for key in sorted(resultado.keys()):
+        valores = resultado[key]
+        minimo = min(valores)
+        maximo = max(valores)
+        resultado_final.append((key, minimo, maximo))
+    
+    print(resultado_final)
+    
+    return resultado_final
 
 
 def pregunta_07():
@@ -149,7 +241,19 @@ def pregunta_07():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        valores = {}
+        for fila in data:
+            if fila[1] not in valores:
+                valores[fila[1]] = [fila[0]]
+            else:
+                valores[fila[1]].append(fila[0])
+        resultado = [(float(key),valores[key]) for key in valores]
+        resultado.sort()
+        print(resultado)
+        
+    return resultado
 
 
 def pregunta_08():
@@ -174,7 +278,19 @@ def pregunta_08():
     ]
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        valores = {}
+        for fila in data:
+            if fila[1] not in valores:
+                valores[fila[1]] = [fila[0]]
+            else:
+                valores[fila[1]].append(fila[0])
+        resultado = [(float(key),sorted(list(set(valores[key])))) for key in valores]
+        resultado.sort()
+        print(resultado)
+        
+    return resultado
 
 
 def pregunta_09():
@@ -197,7 +313,22 @@ def pregunta_09():
     }
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        
+        contador = {}
+        for fila in data:
+            dic = fila[4].split(',')
+            for elemento in dic:
+                key = elemento[:3]
+                if key in contador:
+                    contador[key] += 1
+                else:
+                    contador[key] = 1
+        print(contador)
+    
+    
+    return contador
 
 
 def pregunta_10():
@@ -218,7 +349,19 @@ def pregunta_10():
 
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        
+        resultado = []
+        for fila in data:
+            letra = fila[0]
+            colum4 = fila[3].split(',')
+            colum5 = fila[4].split(',')
+            resultado.append((letra, len(colum4), len(colum5)))
+                      
+        print(resultado)
+   
+    return resultado
 
 
 def pregunta_11():
@@ -239,7 +382,21 @@ def pregunta_11():
 
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        
+        sumas = {}
+        for fila in data:
+            colum4 = fila[3].split(',')
+            for letra in colum4:
+                if letra not in sumas:
+                    sumas[letra] = 0
+                sumas[letra] += int(fila[1])
+                 
+        sumas_ordenadas = dict(sorted(sumas.items()))
+        print(sumas_ordenadas)
+    
+    return sumas_ordenadas
 
 
 def pregunta_12():
@@ -257,4 +414,29 @@ def pregunta_12():
     }
 
     """
-    return
+    with open("data.csv", "r") as datafile:
+        data = csv.reader(datafile, delimiter="\t")
+        
+        resultado = {}
+        
+        for fila in data:
+            letra = fila[0]
+            cadena = fila[4]
+            elementos = cadena.split(',')
+            
+            diccionario_5 = {}
+            
+            for elemento in elementos:
+                clave, valor = elemento.split(':')
+                diccionario_5[clave] = float(valor)
+            suma = sum(diccionario_5.values())
+        
+            if letra not in resultado:
+                resultado[letra] = 0
+            resultado[letra] += suma
+            
+    resultado_ordenado = dict(sorted(resultado.items()))
+            
+    print(resultado_ordenado)
+                   
+    return resultado_ordenado
